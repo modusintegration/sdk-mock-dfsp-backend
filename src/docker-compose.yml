@@ -1,20 +1,39 @@
 version: '3'
 services:
-  redis:
+  redis-1:
     image: "redis:5.0.4-alpine"
 
-  backend:
+  backend-1: # This may be replaced by a simulator ( there's a "golden simulator" )
     image: "mojaloop/sdk-mock-dfsp-backend"
-    env_file: ./backend.env
+    env_file: ./backend-1.env
     ports:
       - "3000:3000"
     depends_on:
-      - scheme-adapter
+      - scheme-adapter-1
 
-  scheme-adapter:
+  scheme-adapter-1:
     image: "mojaloop/sdk-scheme-adapter:latest"
-    env_file: ./scheme-adapter.env
+    env_file: ./scheme-adapter-1.env
     ports:
       - "4000:4000"
     depends_on:
-      - redis
+      - redis-1
+
+  redis-2:
+    image: "redis:5.0.4-alpine"
+
+  backend-2: # This would be replaced by a PortX instance implementing the InboundAPI
+    image: "mojaloop/sdk-mock-dfsp-backend"
+    env_file: ./backend-2.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - scheme-adapter-2
+
+  scheme-adapter-2:
+    image: "mojaloop/sdk-scheme-adapter:latest"
+    env_file: ./scheme-adapter-2.env
+    ports:
+      - "6000:6000"
+    depends_on:
+      - redis-2
