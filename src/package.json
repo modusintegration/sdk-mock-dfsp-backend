@@ -1,6 +1,6 @@
 {
   "name": "@mojaloop/mock-dfsp-backend",
-  "version": "7.4.0",
+  "version": "7.5.0",
   "description": "A mock DFSP backend for Mojaloop SDK testing and learning",
   "main": "server.js",
   "scripts": {
@@ -18,6 +18,7 @@
   "dependencies": {
     "base64url": "^3.0.1",
     "express": "^4.16.3",
+    "moment": "^2.24.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   }

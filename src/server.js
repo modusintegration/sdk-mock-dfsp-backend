@@ -21,6 +21,8 @@ const outboundEndpoint = process.env['OUTBOUND_ENDPOINT'] || 'http://scheme-adap
 const { parties } = require('./data.json');
 let homeTransactionId = 1000000;
 
+const moment = require('moment');
+
 
 /**
  * Look for JSON bodies on all incoming requests
@@ -77,18 +79,39 @@ app.get('/parties/:idType/:idValue', async (req, res) => {
  * for accepting a particular transfer.
  */
 app.post('/quoterequests', async (req, res) => {
-    // always return zero fees
+
     console.log(`Quote request received: ${util.inspect(req.body)}`);
 
-    res.send({
+    let quote = {
         quoteId: req.body.quoteId,
         transactionId: req.body.transactionId,
         transferAmount: req.body.amount,
-        transferAmountCurrency: req.body.currency,
         payeeReceiveAmount: req.body.amount,
+        transferAmountCurrency: req.body.currency,
         payeeReceiveAmountCurrency: req.body.currency,
         expiration: new Date().toISOString(),
-    });
+    };
+
+    // get 1st group of UUID from transactionID
+    let transaction1stGroup = req.body.transactionId.split('-')[0];
+
+    switch (transaction1stGroup) {
+        case '00000000':
+          console.log('must return an error');
+          // PAYEE_REJECTED_QUOTE
+          res.status(500).send({
+            statusCode: '5101'
+          });
+          break;
+        case '11111111':
+          console.log('expiration will be of one minute');
+          quote.expiration = moment().add(1, 'Minute').toISOString();
+          res.send(quote);
+          break;
+        default:
+          console.log(`valid quote:: ${util.inspect(quote)}`);
+          res.send(quote);
+      }
 });
 
 
