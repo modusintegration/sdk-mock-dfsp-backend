@@ -67,7 +67,7 @@ app.get('/parties/:idType/:idValue', async (req, res) => {
     }
 
     console.log('Party not found');
-    res.status(404).end();
+    res.status(404).send({statusCode: '3204'});
 });
 
 
