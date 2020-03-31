@@ -89,13 +89,13 @@ app.post('/quoterequests', async (req, res) => {
         payeeReceiveAmount: req.body.amount,
         transferAmountCurrency: req.body.currency,
         payeeReceiveAmountCurrency: req.body.currency,
-        expiration: new Date().toISOString(),
+        expiration: moment().add(1, 'Minute').toISOString()
     };
 
-    // get 1st group of UUID from transactionID
-    let transaction1stGroup = req.body.transactionId.split('-')[0];
+    // will use the MSISDN value to return different values
+    let toMSISDN = req.body.to.idValue;
 
-    switch (transaction1stGroup) {
+    switch (toMSISDN) {
         case '00000000':
           console.log('must return an error');
           // PAYEE_REJECTED_QUOTE
@@ -104,10 +104,16 @@ app.post('/quoterequests', async (req, res) => {
           });
           break;
         case '11111111':
-          console.log('expiration will be of one minute');
-          quote.expiration = moment().add(1, 'Minute').toISOString();
+          console.log('expiration will be now');
+          quote.expiration = moment().toISOString();
           res.send(quote);
           break;
+        case '22222222':
+          console.log('will take 70 seconds to respond, to simulate a timeout');
+          await new Promise(r => setTimeout(r, 70000));
+          console.log('sending response');
+          res.send(quote);
+          break;          
         default:
           console.log(`valid quote:: ${util.inspect(quote)}`);
           res.send(quote);
