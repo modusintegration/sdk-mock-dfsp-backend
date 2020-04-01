@@ -113,7 +113,13 @@ app.post('/quoterequests', async (req, res) => {
           await new Promise(r => setTimeout(r, 70000));
           console.log('sending response');
           res.send(quote);
-          break;          
+          break;
+        case '33333333':
+          // diminishing quote
+          console.log('expiration will be in 15min');
+          quote.expiration = moment().add(15, 'Minute').toISOString()
+          res.send(quote);
+          break;
         default:
           console.log(`valid quote:: ${util.inspect(quote)}`);
           res.send(quote);
