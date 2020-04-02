@@ -120,6 +120,13 @@ app.post('/quoterequests', async (req, res) => {
           quote.expiration = moment().add(15, 'Minute').toISOString()
           res.send(quote);
           break;
+        case '44444444':
+          console.log('must return QUOTE_EXPIRED error');
+          // QUOTE_EXPIRED
+          res.status(500).send({
+            statusCode: '3302'
+          });
+          break;
         default:
           console.log(`valid quote:: ${util.inspect(quote)}`);
           res.send(quote);
@@ -154,6 +161,20 @@ app.post('/transfers', async (req, res) => {
           console.log('sending response');
           res.send({
             homeTransactionId: `${homeTransactionId++}`
+          });
+          break;
+        case '77777777':
+          console.log('must return QUOTE_EXPIRED error');
+          // QUOTE_EXPIRED
+          res.status(500).send({
+            statusCode: '3302'
+          });
+          break;
+        case '88888888':
+          console.log('must return TRANSFER_EXPIRED error');
+          // TRANSFER_EXPIRED
+          res.status(500).send({
+            statusCode: '3303'
           });
           break;
         default:

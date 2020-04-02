@@ -23,7 +23,9 @@ services:
     image: "redis:5.0.4-alpine"
 
   backend-2: # This would be replaced by a PortX instance implementing the InboundAPI
-    image: "mojaloop/sdk-mock-dfsp-backend"
+    build:
+      context: ../
+      dockerfile: Dockerfile
     env_file: ./backend-2.env
     ports:
       - "5000:5000"
