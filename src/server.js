@@ -117,7 +117,7 @@ app.post('/quoterequests', async (req, res) => {
         case '33333333':
           // diminishing quote
           console.log('expiration will be in 15min');
-          quote.expiration = moment().add(15, 'Minute').toISOString()
+          quote.expiration = moment().add(15, 'Minute').toISOString();
           res.send(quote);
           break;
         case '44444444':
@@ -178,7 +178,6 @@ app.post('/transfers', async (req, res) => {
           });
           break;
         default:
-          console.log(`valid quote:: ${util.inspect(quote)}`);
           res.send({
             homeTransactionId: `${homeTransactionId++}`
           });     
