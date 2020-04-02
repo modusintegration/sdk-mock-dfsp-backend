@@ -137,9 +137,33 @@ app.post('/transfers', async (req, res) => {
     // transaction to put the incoming funds in the payee acount.
     console.log(`Incoming transfer received: ${util.inspect(req.body)}`);
 
-    res.send({
-        homeTransactionId: `${homeTransactionId++}`
-    });
+    // will use the MSISDN value to return different values
+    let toMSISDN = req.body.to.idValue;
+
+    switch (toMSISDN) {
+        case '55555555':
+          console.log('must return an error');
+          // PAYEE_REJECTED_TXN
+          res.status(500).send({
+            statusCode: '5104'
+          });
+          break;
+        case '66666666':
+          console.log('will take 70 seconds to respond, to simulate a timeout');
+          await new Promise(r => setTimeout(r, 70000));
+          console.log('sending response');
+          res.send({
+            homeTransactionId: `${homeTransactionId++}`
+          });
+          break;
+        default:
+          console.log(`valid quote:: ${util.inspect(quote)}`);
+          res.send({
+            homeTransactionId: `${homeTransactionId++}`
+          });     
+    }    
+
+
 });
 
 
